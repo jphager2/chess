@@ -73,4 +73,11 @@ class ChessBoardTest < MiniTest::Unit::TestCase
     board.move(pawn2,0,2)
     assert_equal pawn2, board.at(0,2)
   end
+
+  def test_pawn_replaced_with_queen_when_it_reaches_the_back_row
+    board = Board.new(:empty)
+    pawn = WhitePawn.new(0,1)
+    2.upto(7) {|y| board.move(pawn,0,y)}
+    assert_kind_of WhiteQueen, board.at(0,7)
+  end
 end

@@ -6,6 +6,8 @@ end
 
 class Board 
 
+  BackRow = { white: 7, black: 0 }
+
   attr_accessor :board, :en_passent
   def initialize(flag = false)
     @board = []
@@ -24,6 +26,10 @@ class Board
 
   def place(piece)
     piece.place_on(self)
+  end
+
+  def remove(piece)
+    piece.remove_from(self)
   end
 
   def at(x,y)
@@ -95,23 +101,70 @@ class NullSpace < EmptySpace
   end
 end
 
-class Pawn < EmptySpace
+class BlackPiece < EmptySpace
+
+  attr_reader :color
 
   def initialize(x,y)
     super
-    @start = true
+    @color = :black
   end
 
+  def enemy_of?(piece)
+    piece.color == :white
+  end
+  
+  def friend_of?(piece)
+    piece.color == color
+  end
+end
+
+class WhitePiece < EmptySpace
+
+  attr_reader :color
+
+  def initialize(x,y)
+    super 
+    @color = :white 
+  end
+
+  def enemy_of?(piece)
+    piece.color == :black 
+  end 
+
+  def friend_of?(piece)
+    piece.color == color
+  end
+end 
+
+module Pawn
+
+  extend self
+
+  # attempt to move the piece to x,y on the board
   def move(board,x,y)
+    # check if it is an illegal move (raises Game::IllegalMove if it is)
     illegal?(board, x, y)
 
+    # make start false if it not already false
     !@start || @start = false
-    board.place(EmptySpace.new(@x, @y))
+
+    # remove the piece from it's original position 
+    board.remove(self)
     
+    # save the piece if it can be taken by en passent
     board.en_passent = (@y-y).abs == 2 ? self : NullSpace.new 
 
+    # update the coordinates
     @x, @y = x, y
-    place_on(board)
+
+    # replace with queen if on back row
+    if @y == Board::BackRow[color]  
+      board.place(@queen.new(@x,@y))
+    else
+      # or place on board
+      place_on(board)
+    end
   end
 
   def illegal?(board,x,y)
@@ -148,45 +201,15 @@ class Pawn < EmptySpace
   end
 end
 
-module Black
+class WhitePawn < WhitePiece 
 
-  extend self
-
-  attr_reader :color
-
-  def enemy_of?(piece)
-    piece.color == :white
-  end
-  
-  def friend_of?(piece)
-    piece.color == color
-  end
-end
-
-module White
-
-  extend self
-
-  attr_reader :color
-
-  def enemy_of?(piece)
-    piece.color == :black 
-  end 
-
-  def friend_of?(piece)
-    piece.color == color
-  end
-end 
-
-
-class WhitePawn < Pawn
-
-  include White 
+  include Pawn 
 
   def initialize(x,y)
     super
+    @start = true
     @direction = 1
-    @color = :white
+    @queen = WhiteQueen
   end
 
   def to_s
@@ -194,14 +217,15 @@ class WhitePawn < Pawn
   end
 end
 
-class BlackPawn < Pawn
+class BlackPawn < BlackPiece 
 
-  include Black
+  include Pawn 
 
   def initialize(x,y)
     super
+    @start = true
     @direction = -1
-    @color = :black
+    @queen = BlackQueen
   end
 
   def to_s
@@ -209,4 +233,20 @@ class BlackPawn < Pawn
   end
 end
 
+module Queen 
+  extend self
+end
 
+class WhiteQueen < WhitePiece
+
+  include Queen
+
+  def initialize(x,y)
+    super
+  end
+end
+
+class BlackQueen < BlackPiece
+
+  include Queen
+end
