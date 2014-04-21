@@ -6,7 +6,7 @@ end
 
 class Board 
 
-  attr_accessor :board
+  attr_accessor :board, :en_passent
   def initialize(flag = false)
     @board = []
     8.times do |y| 
@@ -18,10 +18,12 @@ class Board
     unless flag
       :put_pieces_on_board
     end
+
+    @en_passent = NullSpace.new
   end
 
   def place(piece)
-    piece.place(self)
+    piece.place_on(self)
   end
 
   def at(x,y)
@@ -56,16 +58,40 @@ class EmptySpace
     @color = :none
   end
 
-  def place(board)
+  def place_on(board)
     board.board[@y][@x] = self
+  end
+
+  def remove_from(board)
+    board.board[@y][@x] = EmptySpace.new(@x, @y)
   end
 
   def enemy_of?(piece)
     false
   end
 
+  def friend_of?(piece)
+    false
+  end
+
+  def to_coord
+    [@x, @y]
+  end
+
   def to_s
     "__"
+  end
+end
+
+class NullSpace < EmptySpace
+  def initialize
+  end
+
+  def to_coord
+    [nil, nil]
+  end
+
+  def place_on(board)
   end
 end
 
@@ -81,8 +107,11 @@ class Pawn < EmptySpace
 
     !@start || @start = false
     board.place(EmptySpace.new(@x, @y))
+    
+    board.en_passent = (@y-y).abs == 2 ? self : NullSpace.new 
+
     @x, @y = x, y
-    place(board)
+    place_on(board)
   end
 
   def illegal?(board,x,y)
@@ -101,7 +130,13 @@ class Pawn < EmptySpace
       error = "Your piece is blocking your path"
     elsif board.at(x,y).enemy_of?(self)
       unless possible_attack_moves.find {|move| move == [x,y]}
-        error = "Cannot move attack this way!"
+        error = "Cannot move this way!"
+      end
+    elsif board.en_passent.to_coord[0] == x
+      unless possible_attack_moves.find {|move| move == [x,y]}
+        error = "Cannot move this way!"
+      else
+        board.en_passent.remove_from(board)
       end
     else
       unless possible_moves.find {|move| move == [x,y]}

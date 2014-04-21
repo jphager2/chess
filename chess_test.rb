@@ -62,4 +62,15 @@ class ChessBoardTest < MiniTest::Unit::TestCase
       board.move(pawn,0,2)
     end
   end
+
+  def test_pawn_can_capture_en_passent
+    board = Board.new(:empty)
+    pawn = WhitePawn.new(0,1)
+    pawn2 = BlackPawn.new(1,3)
+    board.place(pawn)
+    board.place(pawn2)
+    board.move(pawn,0,3)
+    board.move(pawn2,0,2)
+    assert_equal pawn2, board.at(0,2)
+  end
 end
