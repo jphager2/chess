@@ -5,7 +5,7 @@ module Pawn
   # attempt to move the piece to x,y on the board
   def move(board,x,y)
     # check if it is an illegal move (raises Game::IllegalMove if it is)
-    illegal?(board, x, y)
+    illegal(board, x, y)
 
     # make start false if it not already false
     !@start || @start = false
@@ -28,7 +28,7 @@ module Pawn
     end
   end
 
-  def illegal?(board,x,y)
+  def illegal(board,x,y)
     possible_moves = [
       [@x, @y+(1 * @direction)],
     ]
