@@ -4,6 +4,7 @@ module Queen
   def move(board,x,y)
     illegal(board,x,y)
 
+    remove_from(board)
     @x,@y = x,y
     place_on(board)
   end
@@ -28,6 +29,11 @@ module Queen
 
     unless possible_moves.find {|move| move == [x,y]}
       raise Game::IllegalMove 
+    end
+
+    
+    if board.at(x,y).friend_of?(self)
+      raise Game::IllegalMove, "This space is occupied by a friend"
     end
 
     raise Game::IllegalMove, "Queens cannot jump" if jumped?(board,x,y)

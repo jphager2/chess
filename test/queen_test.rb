@@ -86,4 +86,18 @@ class QueenTest < MiniTest::Unit::TestCase
       board.move(queen,0,0)
     end
   end
+
+  def test_queen_can_capture_an_enemy_piece
+    board = Board.new
+    queen = BlackQueen.new(4,4)
+    # White Pawn at (1,1)
+    assert_silent {board.move(queen, 1,1)}
+  end
+
+  def test_queen_cannot_move_to_space_occupied_by_a_friend
+    board = Board.new
+    queen = BlackQueen.new(4,4)
+    # Black Pawn at (6,6)
+    assert_raises(Game::IllegalMove) {board.move(queen, 6,6)}
+  end
 end
