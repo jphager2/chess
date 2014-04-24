@@ -2,6 +2,8 @@ module Pawn
 
   extend self
 
+  attr_reader :direction
+
   # attempt to move the piece to x,y on the board
   def move(board,x,y)
     # check if it is an illegal move (raises Game::IllegalMove if it is)
@@ -40,17 +42,21 @@ module Pawn
       [@x+1, @y+(1 * @direction)] 
     ])
 
+    en_passent = board.en_passent
+    en_passent_coord = en_passent.to_coord
+    en_passent_coord[1] &&= en_passent_coord[1] - en_passent.direction
+
     if board.at(x,y).friend_of?(self)
       error = "Your piece is blocking your path"
     elsif board.at(x,y).enemy_of?(self)
       unless possible_attack_moves.find {|move| move == [x,y]}
         error = "Cannot move this way!"
       end
-    elsif board.en_passent.to_coord[0] == x
+    elsif en_passent_coord == [x,y] 
       unless possible_attack_moves.find {|move| move == [x,y]}
         error = "Cannot move this way!"
       else
-        board.en_passent.remove_from(board)
+        en_passent.remove_from(board)
       end
     else
       unless possible_moves.find {|move| move == [x,y]}

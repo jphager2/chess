@@ -85,10 +85,35 @@ class PawnTest < MiniTest::Unit::TestCase
     assert_equal pawn2, board.at(0,2)
   end
 
+  def test_white_pawn_can_capture_en_passent 
+    board = Board.new
+    white_pawn = board.at(3,1)
+    black_pawn = board.at(4,6)
+    board.move(white_pawn,3,3)
+    board.move(white_pawn,3,4)
+    board.move(black_pawn,4,4)
+    board.move(white_pawn,4,5)
+    assert_equal white_pawn, board.at(4,5)
+  end
+
   def test_pawn_replaced_with_queen_when_it_reaches_the_back_row
     board = Board.new(:empty)
     pawn = WhitePawn.new(0,1)
     2.upto(7) {|y| board.move(pawn,0,y)}
     assert_kind_of WhiteQueen, board.at(0,7)
+  end
+
+  def test_does_not_raise_illegal_move_twice_if_second_move_is_legal
+    board = Board.new
+    pawn = board.at(3,1)
+    board.move(pawn,3,3)
+    begin 
+      board.move(pawn,3,5)
+    rescue Game::IllegalMove
+      :this_is_expected
+    end
+    assert_silent do 
+      board.move(pawn,3,4)
+    end
   end
 end

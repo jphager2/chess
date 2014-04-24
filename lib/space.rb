@@ -36,6 +36,8 @@ class EmptySpace
 end
 
 class NullSpace < EmptySpace
+
+  attr_reader :direction 
   def initialize
   end
 
