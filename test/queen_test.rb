@@ -2,7 +2,7 @@ require_relative '../lib/chess'
 
 require 'minitest/autorun'
 
-class QueenTest < MiniTest::Unit::TestCase
+class QueenTest < Minitest::Test
 
   def test_queen_moves
     board = Board.new(:empty)
