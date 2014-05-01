@@ -14,14 +14,19 @@ module Queen
 
     7.times do |coord|
       possible_moves += [
+        # diagonal
         [@x-coord, @y-coord],
-        [@x,       @y-coord],
         [@x+coord, @y-coord],
+        [@x-coord, @y+coord],
+        [@x+coord, @y+coord],
+
+        # horizontal
         [@x-coord, @y],
         [@x+coord, @y],
-        [@x-coord, @y+coord],
+
+        # vertical
+        [@x,       @y-coord],
         [@x,       @y+coord],
-        [@x+coord, @y+coord]
       ]
     end
 
