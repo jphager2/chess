@@ -22,7 +22,7 @@ class Board
       end
 
       [1,6].each do |x|
-        # pieces << BlackKnight.new(x,7) << WhiteKnight.new(x,0)
+        pieces << BlackKnight.new(x,7) << WhiteKnight.new(x,0)
       end
 
       [2,5].each do |x|
