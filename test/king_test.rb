@@ -40,7 +40,9 @@ class KingTest < Minitest::Test
   def test_black_king_can_move_to_castle_right
     board = Board.new(:empty)
     king = BlackKing.new(4,7)
+    rook = BlackRook.new(7,7)
     board.place(king)
+    board.place(rook)
     assert_silent do
       board.move(king,6,7)
     end
@@ -49,7 +51,9 @@ class KingTest < Minitest::Test
   def test_black_king_can_move_to_castle_left
     board = Board.new(:empty)
     king = BlackKing.new(4,7)
+    rook = BlackRook.new(0,7)
     board.place(king)
+    board.place(rook)
     assert_silent do
       board.move(king,2,7)
     end
@@ -57,17 +61,21 @@ class KingTest < Minitest::Test
 
   def test_white_king_can_move_to_castle_right
     board = Board.new(:empty)
-    king = WhiteKing.new(3,7)
+    king = WhiteKing.new(3,0)
+    rook = WhiteRook.new(7,0)
     board.place(king)
+    board.place(rook)
     assert_silent do
-      board.move(king,5,7)
+      board.move(king,5,0)
     end
   end
 
   def test_white_king_can_move_to_castle_left
     board = Board.new(:empty)
     king = WhiteKing.new(3,0)
+    rook = WhiteRook.new(0,0)
     board.place(king)
+    board.place(rook)
     assert_silent do
       board.move(king,1,0)
     end

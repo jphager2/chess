@@ -6,6 +6,8 @@ module Moves
     remove_from(board)
     @x,@y = x,y
     place_on(board)
+
+    @start &&= false
   end
 
   def diagonal(coord)
