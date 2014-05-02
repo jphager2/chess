@@ -31,7 +31,7 @@ class EmptySpace
   end
 
   def to_s
-    "__"
+    (@x + @y) % 2 == 0 ? "__" : "##"
   end
 end
 
