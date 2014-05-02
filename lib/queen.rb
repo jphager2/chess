@@ -1,4 +1,5 @@
 module Queen 
+
   extend self
   include Moves
 
