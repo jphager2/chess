@@ -36,4 +36,51 @@ class KingTest < Minitest::Test
       board.move(king,5,5)
     end
   end
+
+  def test_black_king_can_move_to_castle_right
+    board = Board.new(:empty)
+    king = BlackKing.new(4,7)
+    board.place(king)
+    assert_silent do
+      board.move(king,6,7)
+    end
+  end
+
+  def test_black_king_can_move_to_castle_left
+    board = Board.new(:empty)
+    king = BlackKing.new(4,7)
+    board.place(king)
+    assert_silent do
+      board.move(king,2,7)
+    end
+  end
+
+  def test_white_king_can_move_to_castle_right
+    board = Board.new(:empty)
+    king = WhiteKing.new(3,7)
+    board.place(king)
+    assert_silent do
+      board.move(king,5,7)
+    end
+  end
+
+  def test_white_king_can_move_to_castle_left
+    board = Board.new(:empty)
+    king = WhiteKing.new(3,7)
+    board.place(king)
+    assert_silent do
+      board.move(king,1,7)
+    end
+  end
+
+  def test_king_cannot_jump_to_castle
+    board = Board.new(:empty)
+    king = WhiteKing.new(3,7)
+    queen = WhiteQueen.new(4,7)
+    board.place(king)
+    board.place(queen)
+    assert_raises(Game::IllegalMove) do
+      board.move(king,5,7)
+    end
+  end
 end
