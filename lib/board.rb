@@ -17,6 +17,21 @@ class Board
         pieces << BlackPawn.new(x,6) << WhitePawn.new(x,1)
       end
 
+      [0,7].each do |x|
+        pieces << BlackRook.new(x,7) << WhitePawn.new(x,0)
+      end
+
+      [1,6].each do |x|
+        # pieces << BlackKnight.new(x,7) << WhiteKnight.new(x,0)
+      end
+
+      [2,5].each do |x|
+        pieces << BlackBishop.new(x,7) << WhiteBishop.new(x,0)
+      end 
+
+      pieces << BlackQueen.new(4,7) << WhiteQueen.new(3,0)
+      pieces << BlackKing.new(3,7)  << WhiteKing.new(4,0)
+
       pieces.each {|piece| place(piece)}
     end
 
