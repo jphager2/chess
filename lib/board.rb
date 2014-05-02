@@ -35,6 +35,10 @@ class Board
     board[y][x]
   end
 
+  def enemies(piece)
+    board.flatten.select {|other| other.enemy_of?(piece)}
+  end
+
   def move(piece, x, y)
     piece.move(self, x, y)
   end

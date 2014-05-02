@@ -22,9 +22,34 @@ module King
       raise Game::IllegalMove, "#{x},#{y} is occupied by a friend"
     elsif jumped?(board,x,y)
       raise Game::IllegalMove, "Kings can't jump"
+    elsif checked?(board,x,y)
+      raise Game::IllegalMove, "King move into check"
     else
       :legal_move
     end
+  end
+
+  def checked?(board,x,y)
+    enemies = board.enemies(self)
+    x_diff = x-@x
+    spaces = [[x,y]]
+
+    if x_diff.abs > 1 #castling
+      spaces << [x - 1*(x_diff/x_diff.abs), y]
+    end
+
+    enemies.each do |enemy|
+      spaces.each do |space|
+        begin
+          enemy.illegal(board,*space)
+          return true
+        rescue Game::IllegalMove
+          :not_checked
+        end
+      end
+    end
+
+    return false 
   end
 end
 

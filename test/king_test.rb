@@ -66,21 +66,43 @@ class KingTest < Minitest::Test
 
   def test_white_king_can_move_to_castle_left
     board = Board.new(:empty)
-    king = WhiteKing.new(3,7)
+    king = WhiteKing.new(3,0)
     board.place(king)
     assert_silent do
-      board.move(king,1,7)
+      board.move(king,1,0)
     end
   end
 
   def test_king_cannot_jump_to_castle
     board = Board.new(:empty)
-    king = WhiteKing.new(3,7)
-    queen = WhiteQueen.new(4,7)
+    king = WhiteKing.new(3,0)
+    queen = WhiteQueen.new(4,0)
     board.place(king)
     board.place(queen)
     assert_raises(Game::IllegalMove) do
-      board.move(king,5,7)
+      board.move(king,5,0)
+    end
+  end
+
+  def test_king_cannot_move_into_check
+    board = Board.new(:empty)
+    king = WhiteKing.new(3,0)
+    queen = BlackQueen.new(5,6)
+    board.place(king)
+    board.place(queen)
+    assert_raises(Game::IllegalMove) do
+      board.move(king,5,0)
+    end
+  end
+  
+  def test_king_cannot_move_through_check
+    board = Board.new(:empty)
+    king = WhiteKing.new(3,0)
+    queen = BlackQueen.new(4,6)
+    board.place(king)
+    board.place(queen)
+    assert_raises(Game::IllegalMove) do
+      board.move(king,5,0)
     end
   end
 end
