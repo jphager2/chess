@@ -1,5 +1,6 @@
 module Queen 
   extend self
+  include Moves
 
   def move(board,x,y)
     illegal(board,x,y)
@@ -13,35 +14,20 @@ module Queen
     possible_moves = []
 
     7.times do |coord|
-      possible_moves += [
-        # diagonal
-        [@x-coord, @y-coord],
-        [@x+coord, @y-coord],
-        [@x-coord, @y+coord],
-        [@x+coord, @y+coord],
-
-        # horizontal
-        [@x-coord, @y],
-        [@x+coord, @y],
-
-        # vertical
-        [@x,       @y-coord],
-        [@x,       @y+coord],
-      ]
+      possible_moves += Board.board_safe(
+        diagonal(coord) + horizontal(coord) + vertical(coord) 
+      )
     end
 
-    possible_moves = Board.board_safe(possible_moves)
-
-    unless possible_moves.find {|move| move == [x,y]}
-      raise Game::IllegalMove 
+    if not(possible_moves.any? {|move| move == [x,y]})
+      raise Game::IllegalMove, "#{x},#{y} is not a possible move" 
+    elsif board.at(x,y).friend_of?(self)
+      raise Game::IllegalMove, "#{x},#{y} is occupied by a friend"
+    elsif jumped?(board,x,y) 
+      raise Game::IllegalMove, "Queens cannot jump" 
+    else
+      :legal_move
     end
-
-    
-    if board.at(x,y).friend_of?(self)
-      raise Game::IllegalMove, "This space is occupied by a friend"
-    end
-
-    raise Game::IllegalMove, "Queens cannot jump" if jumped?(board,x,y)
   end
 end
 
