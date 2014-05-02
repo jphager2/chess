@@ -1,4 +1,13 @@
 module Moves
+
+  def move(board,x,y)
+    illegal(board,x,y)
+
+    remove_from(board)
+    @x,@y = x,y
+    place_on(board)
+  end
+
   def diagonal(coord)
     [
       [@x-coord, @y-coord],

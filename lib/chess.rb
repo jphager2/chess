@@ -9,6 +9,7 @@ require_relative 'moves'
 require_relative 'piece'
 require_relative 'pawn'
 require_relative 'queen'
+require_relative 'king'
 
 
 
