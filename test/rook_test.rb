@@ -38,24 +38,4 @@ class RookTest < Minitest::Test
       board.move(rook,4,4)
     end
   end
-
-  def test_rook_moves_when_king_castles_right
-    board = Board.new(:empty)
-    king = BlackKing.new(4,7)
-    rook = BlackRook.new(7,7)
-    board.place(king)
-    board.place(rook)
-    board.move(king,6,7)
-    assert_equal rook, board.at(5,7) 
-  end
-
-  def test_rook_moves_when_king_castles_left
-    board = Board.new(:empty)
-    king = BlackKing.new(4,7)
-    rook = BlackRook.new(0,7)
-    board.place(king)
-    board.place(rook)
-    board.move(king,2,7)
-    assert_equal rook, board.at(3,7)
-  end
 end
