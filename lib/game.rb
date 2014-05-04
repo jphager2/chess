@@ -1,6 +1,6 @@
 class Game
 
-  attr_reader :kings
+  attr_reader :turn
   def initialize
     @board = Board.new
     @kings = {white: @board.at(4,0), black: @board.at(3,7)}
@@ -11,6 +11,10 @@ class Game
 
   def show
     puts @board
+  end
+
+  def over?
+    @over
   end
 
   def at(x,y)
