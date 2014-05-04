@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require_relative 'lib/chess'
+require_relative '../lib/chess'
 
 game = Game.new
 
