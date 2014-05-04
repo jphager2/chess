@@ -42,4 +42,13 @@ class GameTest < Minitest::Test
       game.play([0,1],[0,2])
     end
   end 
+
+  def test_cannot_move_into_check
+    game = white_in_check
+    game.play([2,1],[2,2])
+    game.play([6,6],[6,5])
+    assert_raises(Game::IllegalMove) do
+      game.play([2,2],[2,3])
+    end
+  end
 end
