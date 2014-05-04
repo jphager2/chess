@@ -24,7 +24,7 @@ module King
     elsif jumped?(board,x,y)
       raise Game::IllegalMove, "Kings can't jump"
     elsif checked?(board,x,y,x_diff)
-      raise Game::IllegalMove, "King move into check"
+      raise Game::IllegalMove, "King can't move into check"
     else
       castle(board,x,y,x_diff) if (x_diff).abs > 1
       :legal_move
@@ -50,7 +50,7 @@ module King
     end
   end
 
-  def checked?(board,x,y,x_diff)
+  def checked?(board,x = @x, y = @y, x_diff = 0)
     enemies = board.enemies(self)
     spaces = [[x,y]]
 
