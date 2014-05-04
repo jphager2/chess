@@ -6,6 +6,7 @@ class Game
     @kings = {white: @board.at(4,0), black: @board.at(3,7)}
     @moves = []
     @turn = :white
+    @over = false
   end
 
   def show
@@ -30,6 +31,8 @@ class Game
   end
 
   def play(point_a, point_b) 
+    raise Game::IllegalMove, "Game over" if @over
+
     piece, at_destination = at(*point_a), at(*point_b) 
 
     unless piece.color == @turn
@@ -52,6 +55,13 @@ class Game
     end
 
     switch_turn
+  end
+
+  def resign
+    @over = true
+    print "#{@turn.to_s.capitalize} resigns, "
+    switch_turn
+    puts "#{@turn.to_s.capitalize} wins!" 
   end
 
   private

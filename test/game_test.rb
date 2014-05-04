@@ -1,6 +1,7 @@
 require_relative '../lib/chess'
 
 require 'minitest/autorun'
+require 'stringio'
 
 class GameTest < Minitest::Test
 
@@ -50,5 +51,18 @@ class GameTest < Minitest::Test
     assert_raises(Game::IllegalMove) do
       game.play([2,2],[2,3])
     end
+  end
+
+  def test_player_can_resign
+    out, temp = StringIO.new, $stdout
+    $stdout = out
+
+    game = white_in_check
+    game.resign
+
+    $stdout = temp
+    out.rewind
+
+    assert_match /White resigns, Black wins!/, out.read
   end
 end
