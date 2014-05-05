@@ -3,7 +3,7 @@ class Game
   attr_reader :turn
   def initialize
     @board = Board.new
-    @kings = {white: @board.at(4,0), black: @board.at(3,7)}
+    @king_to_check = {black: @board.at(3,0), white: @board.at(4,7)}
     @moves = []
     @turn = :white
     @over = false
@@ -52,13 +52,12 @@ class Game
       },
       capture: at_destination,
     }
+    switch_turn
 
-    if @kings[@turn].checked?(@board)
+    if @king_to_check[@turn].checked?(@board)
       undo
       raise Game::IllegalMove, "#{@turn}'s king is in check!"
     end
-
-    switch_turn
   end
 
   def resign

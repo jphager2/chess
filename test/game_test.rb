@@ -14,10 +14,10 @@ class GameTest < Minitest::Test
 
   def white_in_check
     game = Game.new
-    game.play([3,1],[3,3])
-    game.play([4,6],[4,5])
-    game.play([1,1],[1,3])
-    game.play([5,7],[1,3])
+    game.play([4,1],[4,3])
+    game.play([3,6],[3,5])
+    game.play([6,1],[6,3])
+    game.play([2,7],[6,3])
     game
   end
 
@@ -46,10 +46,10 @@ class GameTest < Minitest::Test
 
   def test_cannot_move_into_check
     game = white_in_check
-    game.play([2,1],[2,2])
+    game.play([5,1],[5,2])
     game.play([6,6],[6,5])
     assert_raises(Game::IllegalMove) do
-      game.play([2,2],[2,3])
+      game.play([5,2],[5,3])
     end
   end
 
