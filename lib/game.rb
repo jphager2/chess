@@ -23,8 +23,8 @@ class Game
 
   def undo
     move = @moves.pop
-    piece = at(*move[:piece][:point_a])
-    new_piece = piece.class.new(*move[:piece][:point_b])
+    piece = at(*move[:piece][:point_b])
+    new_piece = piece.class.new(*move[:piece][:point_a])
     capture = move[:capture]
 
     @board.remove(piece)

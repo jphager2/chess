@@ -31,12 +31,6 @@ class GameTest < Minitest::Test
     assert_kind_of BlackPawn, this_game.at(6,5)
   end
 
-  def test_game_can_undo_moves
-    game = white_in_check
-    2.times {game.undo}
-    assert_kind_of EmptySpace, game.at(1,3)
-  end
-
   def test_cannot_play_while_in_check
     game = white_in_check
     assert_raises(Game::IllegalMove) do
